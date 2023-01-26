@@ -1,1 +1,0 @@
-../../../../../terraform/tfc/svc/vpc/terraform.tf
