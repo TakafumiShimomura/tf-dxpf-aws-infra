@@ -1,19 +1,16 @@
 version: 0.2
 
+env:
+  parameter-store:
+    GITHUB_TOKEN: "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"
+
 phases:
   install:
-    runtime-versions:
-      java: corretto11
-  pre_build:
     commands:
-      - echo Nothing to do in the pre_build phase...
+      - ${CODEBUILD_SRC_DIR}/scripts/ci/install_packages.sh
   build:
     commands:
-      - echo Build started on `date`
-      - mvn install
-  post_build:
-    commands:
-      - echo Build completed on `date`
-artifacts:
-  files:
-    - target/messageUtil-1.0.jar
+      - ${CODEBUILD_SRC_DIR}/scripts/ci/format.sh
+      - ${CODEBUILD_SRC_DIR}/scripts/ci/validate.sh
+      - ${CODEBUILD_SRC_DIR}/scripts/ci/lint_aws.sh
+      - ${CODEBUILD_SRC_DIR}/scripts/ci/plan.sh
