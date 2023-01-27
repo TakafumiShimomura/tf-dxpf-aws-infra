@@ -21,6 +21,8 @@ provider "aws" {
 }
 
 
+
+
 resource "aws_vpc" "shimomura" {
   cidr_block           = "10.0.0.0/24"
   enable_dns_hostnames = true
