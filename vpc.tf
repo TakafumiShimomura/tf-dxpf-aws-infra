@@ -11,6 +11,7 @@ terraform {
   backend "s3" {
     encrypt        = true
     bucket         = "shimomura-test-codebuild"
+    key            = "terraform.tfstate"
     region         = "ap-northeast-1"
   }
 }
