@@ -1,16 +1,23 @@
 version: 0.2
 
-env:
-  parameter-store:
-    GITHUB_TOKEN: "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"
-
 phases:
   install:
+    runtime-versions:
+      docker: 18
     commands:
-      - ${CODEBUILD_SRC_DIR}/scripts/ci/install_packages.sh
+      - yum install unzip -y
+      - wget https://releases.hashicorp.com/terraform/"$TF_VERSION"/terraform_"$TF_VERSION"_linux_amd64.zip
+      - unzip terraform_"$TF_VERSION"_linux_amd64.zip
+      - mv terraform /usr/local/bin/
+  pre_build:
+    commands:
+      - terraform init -input=false -no-color
+      - terraform plan -input=false -no-color
+
   build:
     commands:
-      - ${CODEBUILD_SRC_DIR}/scripts/ci/format.sh
-      - ${CODEBUILD_SRC_DIR}/scripts/ci/validate.sh
-      - ${CODEBUILD_SRC_DIR}/scripts/ci/lint_aws.sh
-      - ${CODEBUILD_SRC_DIR}/scripts/ci/plan.sh
+      - terraform apply -input=false -auto-approve -no-color
+
+  post_build:
+    commands:
+      - echo terraform apply completed on `date`
